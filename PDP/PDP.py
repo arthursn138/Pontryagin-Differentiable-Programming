@@ -724,32 +724,32 @@ class ControlPlanning:
         dpolicy_de = casadi.jacobian(poly_control, self.auxvar)
         self.dpolicy_de_fn = casadi.Function('dpolicy_de', [self.t, self.state, self.auxvar], [dpolicy_de])
 
-    def setNeuralPolicy(self,hidden_layers):
+    def setNeuralPolicy(self, hidden_layers):
         # Use neural network to represent the policy function: u_t=u(t,x,auxvar).
         # Note that here we use auxvar to denote the parameter of the neural policy
-        layers=hidden_layers+[self.n_control]
+        layers = hidden_layers + [self.n_control]
 
         # time variable
         self.t = SX.sym('t')
 
         # construct the neural policy with the argument inputs to specify the hidden layers of the neural policy
-        a=self.state
-        auxvar=[]
+        a = self.state
+        auxvar = []
         Ak = SX.sym('Ak', layers[0], self.n_state)  # weights matrix
         bk = SX.sym('bk', layers[0])  # bias vector
         auxvar += [Ak.reshape((-1, 1))]
         auxvar += [bk]
-        a=mtimes(Ak, a) + bk
+        a = mtimes(Ak, a) + bk
         for i in range(len(layers)-1):
-            a=tanh(a)
-            Ak = SX.sym('Ak', layers[i+1],layers[i] )  # weights matrix
+            a = tanh(a)
+            Ak = SX.sym('Ak', layers[i+1], layers[i])  # weights matrix
             bk = SX.sym('bk', layers[i+1])  # bias vector
             auxvar += [Ak.reshape((-1, 1))]
             auxvar += [bk]
             a = mtimes(Ak, a) + bk
-        self.auxvar=vcat(auxvar)
+        self.auxvar = vcat(auxvar)
         self.n_auxvar = self.auxvar.numel()
-        neural_policy=a
+        neural_policy = a
         self.policy_fn = casadi.Function('policy_fn', [self.t, self.state, self.auxvar], [neural_policy])
 
         # Differentiate control policy function

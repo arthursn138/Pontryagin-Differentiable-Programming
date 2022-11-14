@@ -1,6 +1,6 @@
 """
 # This module provides some useful tools for solving control systems
-# This module is separate from PDP module, which means that PDP modules can be  used independently of this module
+# This module is separate from PDP module, which means that PDP modules can be used independently of this module
 # This module aims to include the most common control tools coded in Python.
 # Some code block is overlapped with ones in the PDP module
 

@@ -52,7 +52,7 @@ for j in range(1):
             print('Trial:', j, 'Iter:', k, 'loss:', loss, )
 
     # save
-    save_data = {'trail_no': j,
+    save_data = {'trial_no': j,
                  'loss_trace': loss_trace,
                  'parameter_trace': parameter_trace,
                  'learning_rate': lr,

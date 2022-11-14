@@ -83,10 +83,10 @@ for j in range(10):
 
         # print and terminal check
         if k % 1 == 0:
-            print('trial:', j, 'iter:',k, 'loss:', loss_trace[-1].tolist())
+            print('trial:', j, 'iter:', k, 'loss:', loss_trace[-1].tolist())
 
     # save
-    save_data = {'trail_no': j,
+    save_data = {'trial_no': j,
                  'loss_trace': loss_trace,
                  'parameter_trace': parameter_trace,
                  'learning_rate': lr,

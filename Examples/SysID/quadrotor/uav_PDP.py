@@ -50,8 +50,10 @@ for j in range(10):
         if k % 100 == 0:
             print('Trial:', j, 'Iter:', k, 'loss:', loss)
 
+    uav.play_animation(wing_len=1.5, state_traj=true_sol['state_traj_opt'], save_option=1, title='T2')
+
     # save
-    save_data = {'trail_no': j,
+    save_data = {'trial_no': j,
                  'loss_trace': loss_trace,
                  'parameter_trace': parameter_trace,
                  'learning_rate': lr,

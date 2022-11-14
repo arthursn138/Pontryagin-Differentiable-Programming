@@ -42,15 +42,14 @@ print(true_sol['cost'])
 
 
 # --------------------------- do the system control and planning ----------------------------------------
-for j in range(5): # trial loop
+for j in range(15): # trial loop
     # learning rate
     lr = 1e-4
     loss_trace, parameter_trace = [], []
-    oc.init_step_neural_policy(hidden_layers=[oc.n_state,oc.n_state])
+    oc.init_step_neural_policy(hidden_layers=[oc.n_state, oc.n_state])
     initial_parameter = np.random.randn(oc.n_auxvar)
     current_parameter = initial_parameter
-    max_iter = 5000
-    start_time = time.time()
+    max_iter = 500
     for k in range(int(max_iter)):
         # one iteration of PDP
         loss, dp = oc.step(ini_state, horizon, current_parameter)
@@ -60,27 +59,30 @@ for j in range(5): # trial loop
         parameter_trace += [current_parameter]
         # print
         if k % 100 == 0:
-            print('trial:', j ,'Iter:', k, 'loss:', loss)
+            print('trial:', j, 'Iter:', k, 'loss:', loss)
+            # print('auxvar:', oc.auxvar)
+            # print('policy:', oc.policy_fn)
 
     # solve the trajectory
     sol = oc.integrateSys(ini_state, horizon, current_parameter)
 
-    # save the results
-    save_data = {'parameter_trace': parameter_trace,
-                 'loss_trace': loss_trace,
-                 'learning_rate': lr,
-                 'solved_solution': sol,
-                 'true_solution': true_sol,
-                 'time_passed': time.time() - start_time,
-                 'cartpole': {'mc': mc,
-                              'mp': mp,
-                              'l': l,
-                              'wx': wx,
-                              'wq': wq,
-                              'wdx': wdx,
-                              'wdq': wdq,
-                              'wu': wu},
-                 'dt': dt,
-                 'horizon': horizon}
-
-    sio.savemat('./data/PDP_Neural_trial_' + str(j) + '.mat', {'results': save_data})
+    # # save the results
+    # save_data = {'parameter_trace': parameter_trace,
+    #              'loss_trace': loss_trace,
+    #              'learning_rate': lr,
+    #              'solved_solution': sol,
+    #              'true_solution': true_sol,
+    #              'time_passed': time.time() - start_time,
+    #              'cartpole': {'mc': mc,
+    #                           'mp': mp,
+    #                           'l': l,
+    #                           'wx': wx,
+    #                           'wq': wq,
+    #                           'wdx': wdx,
+    #                           'wdq': wdq,
+    #                           'wu': wu},
+    #              'dt': dt,
+    #              'horizon': horizon}
+    #
+    # path = os.getcwd() + '\\data'
+    # sio.savemat(path + '\\PDP_OC_ArthurNN_trial_' + str(j) + '.mat', {'results': save_data})

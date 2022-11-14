@@ -4,6 +4,7 @@ import numpy as np
 import time
 import scipy.io as sio
 import matplotlib.pyplot as plt
+import os
 
 # --------------------------- load environment ----------------------------------------
 pendulum = JinEnv.SinglePendulum()
@@ -20,7 +21,7 @@ pendulumoc.setDyn(dyn)
 pendulumoc.setPathCost(pendulum.path_cost)
 pendulumoc.setFinalCost(pendulum.final_cost)
 # set the horizon and initial condition
-horizon = 10
+horizon = 15
 ini_state = [0, 0]
 
 # --------------------------- create PDP true oc solver ----------------------------------------
@@ -65,30 +66,30 @@ for j in range(10):
     # solve the trajectory
     sol = pendulumoc.integrateSys(ini_state, horizon, current_parameter)
 
-    # print(sol['cost'])
+    print(sol['cost'])
     # plt.figure(0)
     # plt.plot(true_sol['control_traj_opt'])
     # plt.plot(sol['control_traj'])
     # plt.legend(['true_control', 'pdp_control'])
     # plt.show()
-    # pendulum.play_animation(len=2, dt=dt, state_traj=sol['state_traj'], state_traj_ref=true_sol['state_traj_opt'])
+    pendulum.play_animation(len=1, dt=dt, state_traj=sol['state_traj'], save_option=1, title='TestePendulo_trial_' + str(j))
 
-
-    # save the results
-    save_data = {'trail_no': j,
-                 'parameter_trace': parameter_trace,
-                 'loss_trace': loss_trace,
-                 'learning_rate': lr,
-                 'solved_solution': sol,
-                 'true_solution': true_sol,
-                 'time_passed': time.time() - start_time,
-                 'pendulum': {'l': 1,
-                              'm': 1,
-                              'damping_ratio': 0.05,
-                              'wq': 10,
-                              'wdq': 1,
-                              'wu': 0.1},
-                 'dt': dt,
-                 'horizon': horizon
-                 }
-    sio.savemat('./data/PDP_OC_results_trial_' + str(j) + '.mat', {'results': save_data})
+    # # save the results
+    # save_data = {'trial_no': j,
+    #              'parameter_trace': parameter_trace,
+    #              'loss_trace': loss_trace,
+    #              'learning_rate': lr,
+    #              'solved_solution': sol,
+    #              'true_solution': true_sol,
+    #              'time_passed': time.time() - start_time,
+    #              'pendulum': {'l': 1,
+    #                           'm': 1,
+    #                           'damping_ratio': 0.05,
+    #                           'wq': 10,
+    #                           'wdq': 1,
+    #                           'wu': 0.1},
+    #              'dt': dt,
+    #              'horizon': horizon
+    #              }
+    # path = os.getcwd() + '\\data'
+    # sio.savemat(path + '\\PDP_OC_results-ARTHUR_trial_' + str(j) + '.mat', {'results': save_data})

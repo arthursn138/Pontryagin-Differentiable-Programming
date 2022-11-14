@@ -130,7 +130,7 @@ The procedure to instantiate a ControlPlanning object is fairly straightforward,
     Advantage of this is that it will make PDP more robust and not easy to get trapped in local minima.
     * Including the recovery matrix techniques: please see all the methods beginning with 'recmat_'. 
     The idea is to parameterize the policy as Lagrange polynomial with the pivot points being all trajectory points.
-    The advantage of using the recovery matrix is that PDP Control/Planning Mode is more faster, because we can use Recovery matrix to 
+    The advantage of using the recovery matrix is that PDP Control/Planning Mode is faster, because we can use Recovery matrix to 
      solve the gradient in a one-time fashion. Fore more information of the recovery matrix technique, please refer to my previous paper 
      https://arxiv.org/abs/1803.07696 (conditionally accepted by IJRR).
 

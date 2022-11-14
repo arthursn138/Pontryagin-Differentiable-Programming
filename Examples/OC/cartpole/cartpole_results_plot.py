@@ -4,19 +4,21 @@ import numpy as np
 from mpl_toolkits.axes_grid1 import Divider, Size
 from mpl_toolkits.axes_grid1.mpl_axes import Axes
 from matplotlib.ticker import ScalarFormatter
+import os
 
+path = os.getcwd() + '\\data'
 
 # load gps results
 gps_loss_list = []
 for i in range(5):
-    load = sio.loadmat('./data/GPS_Neural_trial_' + str(i))
+    load = sio.loadmat(path + '\\GPS_Neural_trial_' + str(i))
     loss_trace = load['results']['loss_trace'][0, 0].flatten()
     gps_loss_list += [loss_trace]
 
 # load pdp results
 pdp_loss_list = []
 for i in range(5):
-    load = sio.loadmat('./data/PDP_Neural_trial_' + str(i))
+    load = sio.loadmat(path + '\\PDP_Neural_trial_' + str(i))
     loss_trace = load['results']['loss_trace'][0, 0].flatten()
     pdp_loss_list += [loss_trace]
 
@@ -39,12 +41,12 @@ for gps_loss, pdp_loss in zip(gps_loss_list, pdp_loss_list):
     ax[k].tick_params(axis='both', which='major')
     ax[k].set_facecolor('#E6E6E6')
     ax[k].grid()
-    line_gps,=ax[k].plot(gps_loss[0:], marker='v', markevery=50, color='#77AC30', linewidth=4, markersize=10)
-    line_pdp,=ax[k].plot(pdp_loss, marker='o', markevery=50, color = [0.6350, 0.0780, 0.1840], linewidth=4,markersize=10)
+    line_gps, = ax[k].plot(gps_loss[0:], marker='v', markevery=50, color='#77AC30', linewidth=4, markersize=10)
+    line_pdp, = ax[k].plot(pdp_loss, marker='o', markevery=50, color = [0.6350, 0.0780, 0.1840], linewidth=4,markersize=10)
     ax[k].set_title('Trial#'+str(k+1))
     ax[k].legend([line_pdp, line_gps], ['PDP', 'GPS'], facecolor='white', framealpha=0.5)
 
-    k+=1
+    k += 1
 ax[0].set_ylabel('Cartpole control loss')
 plt.subplots_adjust(wspace=0.35, left=0.08, right=0.975)
 plt.show()

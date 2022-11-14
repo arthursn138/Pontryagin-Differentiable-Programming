@@ -24,8 +24,8 @@ dyn = cartpole.X + dt * cartpole.f
 cartpoleoc.setDyn(dyn)
 cartpoleoc.setPathCost(cartpole.path_cost)
 cartpoleoc.setFinalCost(cartpole.final_cost)
-horizon = 25
-ini_state = [0, 0, 0, 0]
+horizon = 35 # Original: 25
+ini_state = [0, math.pi*0.99, 0, 0] # Original repo [0, 0, 0, 0]
 
 # --------------------------- create PDP true OC object ----------------------------------------
 # compute the ground truth
@@ -39,7 +39,7 @@ true_sol = true_cartpoleoc.ocSolver(ini_state=ini_state, horizon=horizon)
 true_state_traj = true_sol['state_traj_opt']
 true_control_traj = true_sol['control_traj_opt']
 print(true_sol['cost'])
-
+cartpole.play_animation(pole_len=1, dt=dt, state_traj=true_sol['state_traj_opt'], save_option=1, title='OC_sol')
 
 # --------------------------- do the system control and planning ----------------------------------------
 for j in range(10):
@@ -65,6 +65,7 @@ for j in range(10):
 
     # solve the trajectory
     sol = cartpoleoc.integrateSys(ini_state, horizon, current_parameter)
+    cartpole.play_animation(pole_len=1, dt=dt, state_traj=sol['state_traj'], save_option=1, title='PDP-LPoly-trial_' + str(j))
 
 
     # save the results
@@ -84,4 +85,6 @@ for j in range(10):
                               'wu': wu},
                  'dt': dt,
                  'horizon': horizon}
-    sio.savemat('./data/PDP_OC_results_trial_' + str(j) + '.mat', {'results': save_data})
+
+    path = os.getcwd() + '\\data'
+    sio.savemat(path + '\\PDP_OC_ArthurPoly_trial_' + str(j) + '.mat', {'results': save_data})

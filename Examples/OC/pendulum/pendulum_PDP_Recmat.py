@@ -4,6 +4,7 @@ import numpy as np
 import time
 import scipy.io as sio
 import matplotlib.pyplot as plt
+import os
 
 # --------------------------- load environment ----------------------------------------
 pendulum = JinEnv.SinglePendulum()
@@ -38,7 +39,7 @@ print(true_sol['cost'])
 # plt.figure(1)
 # plt.plot(true_control_traj)
 # plt.show()
-# pendulum.play_animation(len=1,dt=dt,state_traj=true_state_traj)
+# pendulum.play_animation(len=1, dt=dt, state_traj=true_state_traj)
 
 # ---------------------------- start learning the control policy -------------------------------------
 
@@ -72,7 +73,6 @@ for j in range(10):
     # plt.legend(['true_control', 'pdp_control'])
     # plt.show()
     # pendulum.play_animation(len=2, dt=dt, state_traj=sol['state_traj'], state_traj_ref=true_sol['state_traj_opt'])
-    #
 
     # save the results
     save_data = {'trail_no': j,
@@ -91,4 +91,5 @@ for j in range(10):
                  'dt': dt,
                  'horizon': horizon
                  }
-    sio.savemat('./data/PDP_Recmat_results_trial_' + str(j) + '.mat', {'results': save_data})
+    path = os.getcwd() + '\\data'
+    sio.savemat(path + '\\PDP_Recmat_results_trial_' + str(j) + '.mat', {'results': save_data})

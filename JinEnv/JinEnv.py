@@ -87,7 +87,7 @@ class SinglePendulum:
         self.cost_auxvar = vcat(parameter)
 
         # control goal
-        x_goal = [math.pi, 0, 0, 0]
+        x_goal = [2*(math.pi), 0, 0, 0]
 
         # cost for q
         self.cost_q = (self.q - x_goal[0]) ** 2
@@ -109,7 +109,7 @@ class SinglePendulum:
             position[t, :] = np.array([pos_x, pos_y])
         return position
 
-    def play_animation(self, len, dt, state_traj, state_traj_ref=None, save_option=0):
+    def play_animation(self, len, dt, state_traj, state_traj_ref=None, save_option=0, title='Pendulum'):
 
         # get the position of cart pole
         position = self.get_pendulum_position(len, state_traj)
@@ -156,12 +156,15 @@ class SinglePendulum:
             return line, line_ref, time_text
 
         ani = animation.FuncAnimation(fig, animate, np.size(state_traj, 0),
-                                      interval=50, init_func=init)
+                                      interval=50, init_func=init, repeat_delay=2000)
 
         if save_option != 0:
-            Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
-            ani.save('Pendulum.mp4', writer=writer)
+            # Writer = animation.writers['ffmpeg']
+            # writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
+
+            # Modified to save in .gif
+            writer = animation.PillowWriter(fps=10)
+            ani.save('Pendulum_' + title + '.gif', writer=writer, dpi=300)
             print('save_success')
 
         plt.show()
@@ -326,14 +329,18 @@ class RobotArm:
             return line, line_ref, time_text
 
         ani = animation.FuncAnimation(fig, animate, horizon,
-                                      interval=100, blit=True, init_func=init)
+                                      interval=100, blit=True, init_func=init, repeat_delay=2000)
 
         # save
         if save_option != 0:
-            Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
-            ani.save('robot_arm.mp4', writer=writer)
+            # Writer = animation.writers['ffmpeg']
+            # writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
+
+            # Modified to save in .gif
+            writer = animation.PillowWriter(fps=10)
+            ani.save('Robot_Arm_' + title + '.gif', writer=writer, dpi=300)
             print('save_success')
+            ani.save('robot_arm.gif', writer=writer)
 
         plt.show()
 
@@ -492,13 +499,18 @@ class CartPole:
             return line, line_ref, patch, patch_ref, time_text
 
         ani = animation.FuncAnimation(fig, animate, np.size(state_traj, 0),
-                                      interval=50, init_func=init)
+                                      interval=50, init_func=init, repeat_delay=2000)
 
         if save_option != 0:
-            Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
-            ani.save(title+'.mp4', writer=writer, dpi=300)
+            # # This will save in .mp4
+            # Writer = animation.writers['ffmpeg']
+            # writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
+
+            # Modified to save in .gif
+            writer = animation.PillowWriter(fps=10)
+            ani.save('Cart-Pole_' + title + '.gif', writer=writer, dpi=300)
             print('save_success')
+
 
         plt.show()
 
@@ -652,7 +664,7 @@ class Quadrotor:
         R_B_I = self.dir_cosine(self.q)
         self.cost_q = trace(np.identity(3) - mtimes(transpose(goal_R_B_I), R_B_I))
 
-        # auglar velocity cost
+        # angular velocity cost
         goal_w_B = np.array([0, 0, 0])
         self.cost_w_B = dot(self.w_B - goal_w_B, self.w_B - goal_w_B)
 
@@ -792,7 +804,7 @@ class Quadrotor:
 
 
             # trajectory ref
-            num=sim_horizon-1
+            num = sim_horizon-1
             line_traj_ref.set_data(position_ref[:num, 0], position_ref[:num, 1])
             line_traj_ref.set_3d_properties(position_ref[:num, 2])
 
@@ -818,12 +830,15 @@ class Quadrotor:
             return line_traj, line_arm1, line_arm2, line_arm3, line_arm4, \
                    line_traj_ref, line_arm1_ref, line_arm2_ref, line_arm3_ref, line_arm4_ref, time_text
 
-        ani = animation.FuncAnimation(fig, update_traj, sim_horizon, interval=100, blit=True)
+        ani = animation.FuncAnimation(fig, update_traj, sim_horizon, interval=100, blit=True, repeat_delay=2000)
 
         if save_option != 0:
-            Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
-            ani.save('case2'+title + '.mp4', writer=writer, dpi=300)
+            # Writer = animation.writers['ffmpeg']
+            # writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
+
+            # Modified to save in .gif
+            writer = animation.PillowWriter(fps=10)
+            ani.save('UAV_' + title + '.gif', writer=writer, dpi=300)
             print('save_success')
 
         plt.show()
@@ -1141,9 +1156,12 @@ class Rocket:
         ani = animation.FuncAnimation(fig, update_traj, max(sim_horizon,sim_horizon_ref), interval=100, blit=True)
 
         if save_option != 0:
-            Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
-            ani.save(title + '.mp4', writer=writer, dpi=300)
+            # Writer = animation.writers['ffmpeg']
+            # writer = Writer(fps=10, metadata=dict(artist='Me'), bitrate=-1)
+
+            # Modified to save in .gif
+            writer = animation.PillowWriter(fps=10)
+            ani.save('Rocket_' + title + '.gif', writer=writer, dpi=300)
             print('save_success')
 
         plt.show()
